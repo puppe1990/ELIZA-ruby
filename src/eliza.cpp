@@ -5679,7 +5679,7 @@ DEF_TEST_FUNC(script_and_conversation_test)
 
 DEF_TEST_FUNC(test_alternative_men_are_all_alike_convo)
 {
-    const exchange alt_men_are_all_alike_convo[] = {
+    const exchange weizenbaum_alt_men_are_all_alike_convo[] = {
 
         /*  There is a typewritten paper in Box 8 of Weizenbaum's MIT
             archive giving the following conversation. It's similar
@@ -5729,7 +5729,7 @@ DEF_TEST_FUNC(test_alternative_men_are_all_alike_convo)
     elizascript::script s;
     elizascript::read(elizascript::CACM_1966_01_DOCTOR_script, s);
     elizalogic::eliza eliza(s.rules, s.mem_rule);
-    for (const auto & [prompt, response] : alt_men_are_all_alike_convo)
+    for (const auto & [prompt, response] : weizenbaum_alt_men_are_all_alike_convo)
         TEST_EQUAL(eliza.response(prompt), response);
 }
 
@@ -6290,9 +6290,9 @@ DEF_TEST_FUNC(test_every_DOCTOR_response)
 
 DEF_TEST_FUNC(test_busy_beaver_turing_machine)
 {
-    /*  4-state busy beaver
+    /*  4-state, 2-symbol busy beaver
 
-            A   B   C   D
+                 A   B   C   D
             0   1RB 1LA 1RH 1RD
             1   1LB 0LC 1LD 0RA
 
@@ -6929,8 +6929,7 @@ DEF_TEST_FUNC(test_weizenbaum_march_1965_conversations)
            (I think R EBUT is the user asking to run the program called EBUT and W 1138.0
            is the CTSS reply meaning it started waiting for the program to load at 11:38:00.)
 
-           This is followed by the following exchanges. Where the CACM script response is
-           different to the 3 March response the latter is shown as a comment. */
+           This is followed by the following exchanges. */
 
         { "I AM AFRAID I AM GOING TO DIE SOON.",
           "IS IT BECAUSE YOU ARE AFRAID YOU ARE GOING TO DIE SOON THAT YOU CAME TO ME" },
@@ -7016,11 +7015,13 @@ DEF_TEST_FUNC(test_weizenbaum_july_1977_conversation)
 {
     const exchange weizenbaum_july_1977_conversation[] = {
 
-        /* "Here is part of the printout of a dialogue between patient and computer
-            on the DOCTOR program of a large commercial time-sharing company in
-            New York. A careful reading, says Joseph Weizenbaum, the program's
-            originator, shows the computer/therapist is not really "intelligent"
-            but merely following preprogrammed language rules."
+        /*  The Therapy Game
+            "Here is part of the printout of a dialogue between patient and computer
+             on the DOCTOR program of a large commercial time-sharing company in
+             New York. A careful reading, says Joseph Weizenbaum, the program's
+             originator, shows the computer/therapist is not really "intelligent"
+             but merely following preprogrammed language rules."
+            --Uncredited, but appearing interspersed with the essay...
             THE LAST DREAM
             by Joseph Weizenbaum
             Page 34 of Across the Board: The Conference Board Magazine Vol. XIV No. 7
@@ -7077,7 +7078,7 @@ DEF_TEST_FUNC(test_weizenbaum_july_1977_conversation)
         { "YES.",
           "YOU SEEM QUITE POSITIVE" },
 
-        { "I AM RIGHT NOW. I DON'T ALWAYS FEEL THIS WAY, THOUGH.",
+        { "I AM RIGHT NOW. I DON'T ALWAYS  FEEL THIS WAY, THOUGH.",
           "DO YOU BELIEVE IT NORMAL TO BE RIGHT NOW" },
 
         { "I'M NOT SURE I KNOW WHASTNORMAL IS",
@@ -7085,7 +7086,13 @@ DEF_TEST_FUNC(test_weizenbaum_july_1977_conversation)
 
         { "THIS IS SILLY",
           //"LETS DISCUSS FURTHER WHY YOUR MOTHER MADE YOU COME HERE"
-          //(The order of the MEMORY rules is not the same as in the CACM script?)
+          //  - is not what we get. Why?
+          // Given every other response is correct, it seems quite likely that
+          // Weizenbaum is using the 1966 CACM ELIZA and script for this 1977
+          // conversation. So if the MEMORY rule is as in the CACM script,
+          // some part of the mechanism used to select of one of the four
+          // MEMORY transformations must be different. For example, the SLIP
+          // hash algorithm, or the character encoding. Likely we'll never know.
           "DOES THAT HAVE ANYTHING TO DO WITH THE FACT THAT YOUR MOTHER MADE YOU COME HERE" },
 
         { "YOU CHANGED THE SUBJECT. WHY?",
@@ -7121,7 +7128,7 @@ DEF_TEST_FUNC(test_weizenbaum_july_1977_conversation)
         { "GOOD BYE. SEE YOU NEXT WEEK.",
           "OH, I NEXT WEEK" },
 
-        // end of conversation between a definitely real patient and the computer
+        // end of conversation between another definitely real patient and the computer
     };
 
     elizascript::script s;
