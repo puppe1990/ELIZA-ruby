@@ -25,7 +25,7 @@ There is a huge collection of ELIZA-related information at Jeff Shrager's [eliza
 
 Along with Jeff and others I am contributing to a book about ELIZA. The website is [inventingeliza.com](https://inventingeliza.com/).
 
-Thanks to Rupert Lane, you can now [run the original MAD ELIZA code](https://github.com/rupertl/eliza-ctss). (Jeff's [ELIZA Reanimated paper](https://doi.org/10.48550/arXiv.2501.06707).)
+Thanks to Rupert Lane, you can now [run the version of ELIZA found in the MIT archive](https://github.com/rupertl/eliza-ctss). (Jeff's [ELIZA Reanimated paper](https://doi.org/10.48550/arXiv.2501.06707).)
 
 ---
 
