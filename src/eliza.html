@@ -3199,17 +3199,20 @@ Type *help and press the Enter key to see a list of commands.
             toggleFullscreen();
         }
         else if (command === "*FONTSIZE") {
-            if (parts.length === 2) {
+            if (parts.length === 1) {
+                writeText(fontSize().toString());
+            }
+            else if (parts.length === 2) {
                 const n = parseInt(parts[1]);
                 if (Number.isNaN(n) || n < 1) {
-                    writeText("missing or invalid number; e.g. '*fontsize 24' sets 24 pixel font");
+                    writeText("invalid number; e.g. '*fontsize 24' sets 24 pixel font");
                 }
                 else {
-                    fontSize(n);
+                    setFontSize(n);
                 }
             }
             else {
-                writeText("missing number; e.g. '*fontsize 24' sets 24 pixel font");
+                writeText("too many parameters; e.g. '*fontsize 24' sets 24 pixel font");
             }
         }
         else if (command === "*SAVE") {
@@ -3390,6 +3393,7 @@ The commands are:`);
 *cacm        - replay conversation from Weizenbaum's 1966 CACM paper
 *clear       - clear screen and conversation and trace logs
 *crt         - toggle "Cathode-Ray Tube" text-blur
+*fontsize    - show the current font size in pixels
 *fontsize N  - set the font size to N pixels
 *full        - toggle fullscreen mode
 *help        - show this list of commands
@@ -3511,7 +3515,14 @@ The commands are:`);
         b.style.backgroundColor = bgColour;
     }
 
-    function fontSize(px) {
+    function fontSize() {
+        const c = document.getElementById("console");
+        const style = window.getComputedStyle(c, null).getPropertyValue('font-size');
+        const fontSize = Math.floor(parseFloat(style)); 
+        return(fontSize);
+    }
+
+    function setFontSize(px) {
         const c = document.getElementById("console");
         c.style.fontSize = px + 'px';
         const l = document.getElementById("log");
@@ -3583,5 +3594,3 @@ The commands are:`);
 </div>
 
 </html>
-
-
