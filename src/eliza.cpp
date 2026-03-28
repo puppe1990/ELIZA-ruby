@@ -5734,6 +5734,51 @@ DEF_TEST_FUNC(test_alternative_men_are_all_alike_convo)
 }
 
 
+DEF_TEST_FUNC(test_I_am_very_unhappy_these_days_convo)
+{
+    const exchange weizenbaum_I_am_very_unhappy_these_days_convo[] = {
+
+        /*  In the MIT Distinctive Collections for ELIZA there is a 
+            folder titled "PROPOSAL-COMPUTER SYSTEMS FOR TUTORIAL DIALOGUES"
+            dated 12/67. It contains a paper titled
+
+                                ELIZA
+                 A Computer Program for the Study of
+                Natural Language Communication between
+                            Man and Machine
+                                  by
+                           Joseph Weizenbaum
+                          Associate Professor
+                Department of Electrical Engineering
+                Massachusetts Institute of Technology
+                            August 10, 1965
+
+            This paper is very similar to the January 1966 CACM ELIZA
+            paper. One of the differences is the "typical conversation,"
+            reproduced below, which is not the Men are all alike
+            conversation given in the CACM paper. */
+
+        { "I am very unhappy these days.",
+        // I AM SORRY TO HEAR YOU ARE UNHAPPY.
+          "I AM SORRY TO HEAR YOU ARE UNHAPPY" },
+
+        { "Can you help me, do you think.",
+          "YOU BELIEVE I CAN HELP YOU DON'T YOU" },
+
+        { "I don't know what to believe.",
+          "DON'T YOU REALLY KNOW WHAT TO BELIEVE" },
+
+        { "Well, what can one believe in.",
+          "WHY DO YOU ASK" },
+    };
+
+    elizascript::script s;
+    elizascript::read(elizascript::CACM_1966_01_DOCTOR_script, s);
+    elizalogic::eliza eliza(s.rules, s.mem_rule);
+    for (const auto & [prompt, response] : weizenbaum_I_am_very_unhappy_these_days_convo)
+        TEST_EQUAL(eliza.response(prompt), response);
+}
+
 
 DEF_TEST_FUNC(test_every_DOCTOR_response)
 {
@@ -7260,7 +7305,6 @@ bool parse_cmdline(
 
 
 
-//#include "unpublished_script_tests.cpp"
 
 int main(int argc, const char * argv[])
 {
