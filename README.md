@@ -1,48 +1,91 @@
-# Joseph Weizenbaum’s 1966 ELIZA recreated in C++
+# ELIZA em Ruby
 
-I’ve made in C++ what I think is an accurate simulation of the original ELIZA. It is a console application that takes as input the original format script file, which looks like a series of S-expressions, and then waits for the user to type a line of text before responding with a line of text of its own.
+Reescrita em Ruby do ELIZA com uma versão em inglês e uma adaptação em português, guiada por testes com `minitest`.
 
-[![A simulated blurry CRT terminal screen showing ELIZA running and the start of the famous "men are all alike" conversation.](https://github.com/anthay/ELIZA/blob/master/doc/action-shot.jpg)](https://anthay.github.io/eliza.html)
+O projeto mantém a ideia central do ELIZA original:
+- leitura de regras em formato parecido com S-expressions
+- seleção de palavras-chave por precedência
+- decomposição e remontagem de frases
+- mecanismo de memória
 
-ELIZA is a chatbot—the first chatbot—written between 1964-1966 by Joseph Weizenbaum, Professor of Computer Science at MIT, and part-supported by the US Department of Defence Project MAC. It is configured via a "script," the most famous of which is called DOCTOR. The script contains simple pattern matching rules that ELIZA uses to reflect back parts of the text typed in by the user. Weizenbaum's purpose was not to advance our understanding of intelligence, but to create the illusion that ELIZA understood what had been said to it in order to demonstrate how easily people can be fooled.
+## Estrutura
 
-I made this before the ELIZA source code had been found, and wrote about it in [part 1](https://github.com/anthay/ELIZA/blob/master/doc/Eliza_part_1.md).
+- [lib/eliza.rb](/Users/matheuspuppe/Desktop/Projetos/github/ELIZA-ruby/lib/eliza.rb): implementação principal
+- [bin/eliza](/Users/matheuspuppe/Desktop/Projetos/github/ELIZA-ruby/bin/eliza): interface de linha de comando
+- [test/eliza_test.rb](/Users/matheuspuppe/Desktop/Projetos/github/ELIZA-ruby/test/eliza_test.rb): suíte de testes
+- [scripts/ruby/default_pt.script](/Users/matheuspuppe/Desktop/Projetos/github/ELIZA-ruby/scripts/ruby/default_pt.script) e [scripts/ruby/default_en.script](/Users/matheuspuppe/Desktop/Projetos/github/ELIZA-ruby/scripts/ruby/default_en.script): scripts padrão carregados pela aplicação
 
-[Part 2](https://github.com/anthay/ELIZA/blob/master/doc/Eliza_part_2.md) describes changes I made after the ELIZA source code was found.
+## Requisitos
 
-[Part 3](https://github.com/anthay/ELIZA/blob/master/doc/Eliza_part_3.md) is about the HASH function, now that too has been found. 
+- Ruby 3.1+ (testado aqui com Ruby 4.0.2)
 
-In a [footnote](https://github.com/anthay/ELIZA/blob/master/doc/Trying_to_recreate_RFC439.md) I document trying to recreate the PARRY/DOCTOR conversation from RFC439.
+## Instalação
 
-My son Max Hay and I recreated ELIZA in JavaScript [here](https://github.com/anthay/ELIZA/blob/master/src/eliza.html). Try it [here](https://anthay.github.io/eliza.html).
-
-I added [serial I/O](https://github.com/anthay/ELIZA/blob/master/doc/serial_io.md) to run ELIZA on an ASR 33 teletype.
-
-I helped show that 1966 CACM ELIZA is [Turing complete](https://sites.google.com/view/elizagen-org/blog/eliza-is-turing-complete).
-There are several Turing machine ELIZA scripts [here](https://github.com/anthay/ELIZA/blob/master/scripts/scripts.md).
-
-There is a huge collection of ELIZA-related information at Jeff Shrager's [elizagen.org](https://elizagen.org).
-
-Along with Jeff and others I am contributing to a book about ELIZA. The website is [inventingeliza.com](https://inventingeliza.com/).
-
-Thanks to Rupert Lane, you can [run the ELIZA code found in the MIT archive](https://github.com/rupertl/eliza-ctss), which is a slightly earlier version than 1966 ELIZA. (Jeff's [ELIZA Reanimated paper](https://doi.org/10.48550/arXiv.2501.06707).)
-
----
-
-### To build and run ELIZA
-
-Note that the whole of ELIZA is in the one file [eliza.cpp](https://github.com/anthay/ELIZA/blob/master/src/eliza.cpp) (unless you wish to also use the serial I/O code mentioned above).
-
-POSIX (e.g. macOS) (I used Apple clang version 15.0.0 that came with Xcode):
-
-```text
-clang++ -std=c++20 -pedantic -o eliza eliza.cpp
-./eliza
+```bash
+bundle install
 ```
 
-Windows (I used Microsoft Visual Studio 2019 Community Edition Command Prompt):
+Se você não quiser usar Bundler, também pode rodar diretamente com `ruby`, porque este projeto usa apenas biblioteca padrão.
+
+## Uso
+
+Inglês:
+
+```bash
+ruby bin/eliza en
+```
+
+Português:
+
+```bash
+ruby bin/eliza pt
+```
+
+Exemplo:
 
 ```text
-cl /EHsc /W4 /std:c++20 eliza.cpp
-eliza
+$ ruby bin/eliza pt
+OLA COMO VOCE ESTA CONTE SEU PROBLEMA
+> meu pai e rigido
+SEU PAI SOU RIGIDO
+> x
+POR FAVOR, CONTINUE
+> x
+VAMOS DISCUTIR MAIS POR QUE SEU PAI SOU RIGIDO
 ```
+
+Para encerrar:
+- envie uma linha vazia
+- ou use `Ctrl+D`
+
+## Testes
+
+Com Ruby direto:
+
+```bash
+ruby test/eliza_test.rb
+```
+
+Com Bundler:
+
+```bash
+bundle exec ruby test/eliza_test.rb
+```
+
+Ou via `rake`:
+
+```bash
+bundle exec rake test
+```
+
+## Estado atual
+
+Pronto para uso local:
+- CLI funcional
+- testes cobrindo parsing, precedência, substituições, memória e português
+- sem dependências externas obrigatórias
+
+Melhorias possíveis:
+- expandir o script em português para soar mais natural
+- permitir escolher um script customizado por argumento
+- publicar como gem
