@@ -27,6 +27,12 @@ bundle install
 
 Se você não quiser usar Bundler, também pode rodar diretamente com `ruby`, porque este projeto usa apenas biblioteca padrão.
 
+Para ativar o hook versionado de `pre-commit` neste clone:
+
+```bash
+git config core.hooksPath .githooks
+```
+
 ## Uso
 
 Inglês:
@@ -45,13 +51,13 @@ Exemplo:
 
 ```text
 $ ruby bin/eliza pt
-OLA COMO VOCE ESTA CONTE SEU PROBLEMA
+OLA PODE ME CONTAR O QUE ESTA ACONTECENDO
 > meu pai e rigido
-SEU PAI SOU RIGIDO
+COMO E SUA RELACAO COM SEU PAI
 > x
-POR FAVOR, CONTINUE
+PODE ME CONTAR MAIS
 > x
-VAMOS DISCUTIR MAIS POR QUE SEU PAI SOU RIGIDO
+ANTES VOCE FALOU DO SEU PAI
 ```
 
 Para encerrar:
@@ -78,12 +84,26 @@ Ou via `rake`:
 bundle exec rake test
 ```
 
+Lint:
+
+```bash
+bundle exec rake lint
+```
+
+Suite local igual ao CI:
+
+```bash
+bundle exec rake ci
+```
+
 ## Estado atual
 
 Pronto para uso local:
 - CLI funcional
 - testes cobrindo parsing, precedência, substituições, memória e português
-- sem dependências externas obrigatórias
+- lint com RuboCop
+- hook de `pre-commit` versionado
+- CI no GitHub Actions
 
 Melhorias possíveis:
 - expandir o script em português para soar mais natural

@@ -1,4 +1,7 @@
-source "https://rubygems.org"
+# frozen_string_literal: true
 
-gem "minitest"
-gem "rake"
+source 'https://rubygems.org'
+
+gem 'minitest'
+gem 'rake'
+gem 'rubocop', require: false

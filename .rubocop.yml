@@ -1,0 +1,48 @@
+AllCops:
+  NewCops: enable
+  SuggestExtensions: false
+  TargetRubyVersion: 3.1
+  Exclude:
+    - 'bin/*'
+    - 'doc/**/*'
+    - 'scripts/**/*'
+    - 'src/**/*'
+
+Layout/LineLength:
+  Max: 100
+
+Metrics/AbcSize:
+  Exclude:
+    - 'lib/eliza.rb'
+
+Metrics/BlockLength:
+  Exclude:
+    - 'test/**/*'
+
+Metrics/ClassLength:
+  Exclude:
+    - 'lib/eliza.rb'
+    - 'test/eliza_test.rb'
+
+Metrics/CyclomaticComplexity:
+  Exclude:
+    - 'lib/eliza.rb'
+
+Metrics/MethodLength:
+  Exclude:
+    - 'lib/eliza.rb'
+
+Metrics/ParameterLists:
+  Exclude:
+    - 'lib/eliza.rb'
+
+Metrics/PerceivedComplexity:
+  Exclude:
+    - 'lib/eliza.rb'
+
+Naming/MethodParameterName:
+  Exclude:
+    - 'lib/eliza.rb'
+
+Style/Documentation:
+  Enabled: false

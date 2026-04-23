@@ -1,12 +1,14 @@
+# frozen_string_literal: true
+
 module Eliza
-  SCRIPT_DIR = File.expand_path("../scripts/ruby", __dir__)
+  SCRIPT_DIR = File.expand_path('../scripts/ruby', __dir__)
 
   def self.default_script(locale)
     case locale
     when :en
-      File.read(File.join(SCRIPT_DIR, "default_en.script"))
+      File.read(File.join(SCRIPT_DIR, 'default_en.script'))
     when :pt
-      File.read(File.join(SCRIPT_DIR, "default_pt.script"))
+      File.read(File.join(SCRIPT_DIR, 'default_pt.script'))
     else
       raise ArgumentError, "Unsupported locale: #{locale}"
     end
@@ -23,7 +25,8 @@ module Eliza
       new(text).parse
     end
 
-    def initialize(text = nil, greeting: nil, rules: nil, none_rule: nil, memory_rule: nil, substitutions: nil)
+    def initialize(text = nil, greeting: nil, rules: nil, none_rule: nil, memory_rule: nil,
+                   substitutions: nil)
       @text = text
       @greeting = greeting
       @rules = rules
@@ -34,12 +37,12 @@ module Eliza
 
     def parse
       forms = Sexp.parse(@text)
-      raise ArgumentError, "Script must have at least greeting and one rule" if forms.size < 2
+      raise ArgumentError, 'Script must have at least greeting and one rule' if forms.size < 2
 
       greeting_tokens = forms.shift
-      greeting = greeting_tokens.join(" ")
+      greeting = greeting_tokens.join(' ')
 
-      forms.shift if forms.first == "START"
+      forms.shift if forms.first == 'START'
 
       rules = {}
       substitutions = {}
@@ -49,9 +52,9 @@ module Eliza
       forms.each do |form|
         keyword = form[0]
         case keyword
-        when "MEMORY"
+        when 'MEMORY'
           memory_rule = parse_memory_rule(form)
-        when "NONE"
+        when 'NONE'
           none_rule = parse_keyword_rule(form)
         else
           rule = parse_keyword_rule(form)
@@ -60,7 +63,7 @@ module Eliza
         end
       end
 
-      raise ArgumentError, "Script missing NONE rule" unless none_rule
+      raise ArgumentError, 'Script missing NONE rule' unless none_rule
 
       self.class.new(
         nil,
@@ -80,7 +83,7 @@ module Eliza
       substitute = nil
       precedence = 0
 
-      if form[index] == "="
+      if form[index] == '='
         substitute = form[index + 1]
         index += 2
       end
@@ -111,7 +114,7 @@ module Eliza
     def parse_memory_rule(form)
       keyword = form[1]
       transforms = form[2..].map do |pair|
-        eq = pair.index("=")
+        eq = pair.index('=')
         decomposition = pair[0...eq]
         reassembly = pair[(eq + 1)..]
         Transform.new(decomposition: decomposition, reassemblies: [reassembly])
@@ -126,27 +129,25 @@ module Eliza
     def parse(source)
       tokens = tokenize(source)
       forms = []
-      until tokens.empty?
-        forms << read(tokens)
-      end
+      forms << read(tokens) until tokens.empty?
       forms
     end
 
     def tokenize(source)
       content = source
-        .lines
-        .map { |line| line.sub(/;.*/, "") }
-        .join
+                .lines
+                .map { |line| line.sub(/;.*/, '') }
+                .join
       content.scan(/\(|\)|[^\s()]+/)
     end
 
     def read(tokens)
       token = tokens.shift
-      return token if token != "("
+      return token if token != '('
 
       list = []
-      until tokens.first == ")"
-        raise ArgumentError, "Unbalanced script parentheses" if tokens.empty?
+      until tokens.first == ')'
+        raise ArgumentError, 'Unbalanced script parentheses' if tokens.empty?
 
         list << read(tokens)
       end
@@ -158,12 +159,12 @@ module Eliza
   class Bot
     REFLECTIONS = {
       en: {
-        "I" => "YOU", "ME" => "YOU", "MY" => "YOUR", "AM" => "ARE",
-        "YOU" => "I", "YOUR" => "MY", "ARE" => "AM"
+        'I' => 'YOU', 'ME' => 'YOU', 'MY' => 'YOUR', 'AM' => 'ARE',
+        'YOU' => 'I', 'YOUR' => 'MY', 'ARE' => 'AM'
       },
       pt: {
-        "EU" => "VOCE", "ME" => "VOCE", "MEU" => "SEU", "MINHA" => "SUA",
-        "SOU" => "E", "VOCE" => "EU", "SEU" => "MEU", "SUA" => "MINHA", "E" => "SOU"
+        'EU' => 'VOCE', 'ME' => 'VOCE', 'MEU' => 'SEU', 'MINHA' => 'SUA',
+        'SOU' => 'E', 'VOCE' => 'EU', 'SEU' => 'MEU', 'SUA' => 'MINHA'
       }
     }.freeze
 
@@ -201,13 +202,13 @@ module Eliza
         return response if response
       end
 
-      apply_rule(@script.none_rule, words) || "PLEASE CONTINUE"
+      apply_rule(@script.none_rule, words) || 'PLEASE CONTINUE'
     end
 
     private
 
     def normalize(text)
-      text.upcase.gsub(/[^A-Z0-9'\s]/, " ").gsub(/\s+/, " ").strip.split
+      text.upcase.gsub(/[^A-Z0-9'\s]/, ' ').gsub(/\s+/, ' ').strip.split
     end
 
     def scan_input(raw_words)
@@ -250,10 +251,9 @@ module Eliza
     end
 
     def maybe_memory_or_none(words)
-      if @limit == 4 && !@memory_stack.empty?
-        return @memory_stack.shift
-      end
-      apply_rule(@script.none_rule, words) || "PLEASE CONTINUE"
+      return @memory_stack.shift if @limit == 4 && !@memory_stack.empty?
+
+      apply_rule(@script.none_rule, words) || 'PLEASE CONTINUE'
     end
 
     def apply_rule(rule, words)
@@ -262,18 +262,20 @@ module Eliza
         next unless captures
 
         template = rotate(rule.keyword, transform.reassemblies)
-        if template == ["NEWKEY"]
+        if template == ['NEWKEY']
           return nil
-        elsif template.first == "=" || (template.size == 1 && template.first.start_with?("="))
-          linked_key = if template.first == "="
+        elsif template.first == '=' || (template.size == 1 && template.first.start_with?('='))
+          linked_key = if template.first == '='
                          template[1]
                        else
                          template.first[1..]
                        end
           linked = @script.rules[linked_key]
           return apply_rule(linked, words) if linked
+
           next
         end
+
         return assemble(template, captures)
       end
       nil
@@ -295,7 +297,7 @@ module Eliza
           [token]
         end
       end
-      out.join(" ").gsub(/\s+/, " ").strip
+      out.join(' ').gsub(/\s+/, ' ').strip
     end
 
     def reflect_words(words)
